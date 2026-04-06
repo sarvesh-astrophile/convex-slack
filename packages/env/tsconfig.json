@@ -1,0 +1,3 @@
+{
+  "extends": "@open-slack/config/tsconfig.base.json"
+}
