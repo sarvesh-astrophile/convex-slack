@@ -1,9 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { AuthScreen } from "@/features/auth/components/auth-screen";
 
 export const Route = createFileRoute("/auth")({
 	component: RouteComponent,
 });
 
 function RouteComponent() {
-	return <div>Hello "/signin"!</div>;
+	return <AuthScreen />;
 }
