@@ -1,3 +1,5 @@
+import { useAuthActions } from "@convex-dev/auth/react";
+import { Button } from "@open-slack/ui/components/button";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_protected/test")({
@@ -5,5 +7,17 @@ export const Route = createFileRoute("/_protected/test")({
 });
 
 function RouteComponent() {
-	return <div>Hello "/test"!</div>;
+	const { signOut } = useAuthActions();
+	return (
+		<div>
+			Hello "/test"!
+			<Button
+				onClick={() => {
+					signOut();
+				}}
+			>
+				Sign Out
+			</Button>
+		</div>
+	);
 }
