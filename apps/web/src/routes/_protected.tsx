@@ -10,7 +10,7 @@ export const Route = createFileRoute("/_protected")({
 		);
 
 		if (!isAuthenticated) {
-			throw redirect({ to: "/signin" });
+			throw redirect({ to: "/auth" });
 		}
 	},
 });
