@@ -12,8 +12,6 @@ import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { ConvexReactClient } from "convex/react";
 import { ThemeProvider } from "@/components/theme-provider";
 
-import Header from "../components/header";
-
 import appCss from "../index.css?url";
 
 export interface RouterAppContext {
@@ -52,11 +50,11 @@ function RootDocument() {
 	return (
 		<ConvexAuthProvider client={convex}>
 			<ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
-				<html lang="en" className="dark">
+				<html lang="en" className="dark" suppressHydrationWarning>
 					<head>
 						<HeadContent />
 					</head>
-					<body>
+					<body suppressHydrationWarning>
 						<div className="h-full">
 							<Outlet />
 						</div>

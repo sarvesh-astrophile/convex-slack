@@ -4,16 +4,6 @@ import Header from "@/components/header";
 
 export const Route = createFileRoute("/_protected")({
 	component: AuthenticatedLayout,
-	beforeLoad: async ({ context }) => {
-		const isAuthenticated = await context.convexQueryClient.convexClient.query(
-			api.auth.isAuthenticated,
-			{},
-		);
-
-		if (!isAuthenticated) {
-			throw redirect({ to: "/auth" });
-		}
-	},
 });
 
 function AuthenticatedLayout() {

@@ -22,8 +22,12 @@ interface SignUpCardProps {
 
 export const SignUpCard = ({ setState }: SignUpCardProps) => {
 	const { signIn } = useAuthActions();
-	const handleProviderSignIn = (value: "github" | "google") => {
-		signIn(value);
+	const handleProviderSignIn = async (value: "github" | "google") => {
+		const result = await signIn(value);
+		// OAuth requires redirect to provider
+		if (result.redirect) {
+			window.location.href = result.redirect.toString();
+		}
 	};
 	const form = useForm({
 		defaultValues: {
