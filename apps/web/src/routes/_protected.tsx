@@ -1,5 +1,5 @@
-import { Authenticated, AuthLoading, Unauthenticated } from "convex/react";
 import { createFileRoute, Navigate, Outlet } from "@tanstack/react-router";
+import { Authenticated, AuthLoading, Unauthenticated } from "convex/react";
 import { LoaderCircle } from "lucide-react";
 import Header from "@/components/header";
 
