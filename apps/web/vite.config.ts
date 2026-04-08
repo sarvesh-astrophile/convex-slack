@@ -11,6 +11,6 @@ export default defineConfig({
     port: 3001,
   },
   ssr: {
-    noExternal: ["@convex-dev/better-auth"],
+    noExternal: [],
   },
 });

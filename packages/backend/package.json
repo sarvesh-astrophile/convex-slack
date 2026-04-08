@@ -9,8 +9,6 @@
         "dev:setup": "convex dev --configure --until-success"
     },
     "dependencies": {
-        "@auth/core": "^0.37.3",
-        "@convex-dev/auth": "^0.0.91",
         "convex": "catalog:",
         "dotenv": "catalog:",
         "zod": "catalog:"
