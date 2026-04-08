@@ -1,4 +1,4 @@
-import { ConvexBetterAuthProvider } from "@convex-dev/better-auth/react";
+import { ConvexAuthProvider } from "@convex-dev/auth/react";
 import type { ConvexQueryClient } from "@convex-dev/react-query";
 import { Toaster } from "@open-slack/ui/components/sonner";
 import type { QueryClient } from "@tanstack/react-query";
@@ -7,27 +7,21 @@ import {
 	HeadContent,
 	Outlet,
 	Scripts,
-	useRouteContext,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
-import { createServerFn } from "@tanstack/react-start";
+import { ConvexReactClient } from "convex/react";
 import { ThemeProvider } from "@/components/theme-provider";
-
-import { authClient } from "@/lib/auth-client";
-import { getToken } from "@/lib/auth-server";
 
 import Header from "../components/header";
 
 import appCss from "../index.css?url";
 
-const getAuth = createServerFn({ method: "GET" }).handler(async () => {
-	return await getToken();
-});
-
 export interface RouterAppContext {
 	queryClient: QueryClient;
 	convexQueryClient: ConvexQueryClient;
 }
+
+const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL as string);
 
 export const Route = createRootRouteWithContext<RouterAppContext>()({
 	head: () => ({
@@ -52,26 +46,11 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
 	}),
 
 	component: RootDocument,
-	beforeLoad: async (ctx) => {
-		const token = await getAuth();
-		if (token) {
-			ctx.context.convexQueryClient.serverHttpClient?.setAuth(token);
-		}
-		return {
-			isAuthenticated: !!token,
-			token,
-		};
-	},
 });
 
 function RootDocument() {
-	const context = useRouteContext({ from: Route.id });
 	return (
-		<ConvexBetterAuthProvider
-			client={context.convexQueryClient.convexClient}
-			authClient={authClient}
-			initialToken={context.token}
-		>
+		<ConvexAuthProvider client={convex}>
 			<ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
 				<html lang="en" className="dark">
 					<head>
@@ -88,6 +67,6 @@ function RootDocument() {
 					</body>
 				</html>
 			</ThemeProvider>
-		</ConvexBetterAuthProvider>
+		</ConvexAuthProvider>
 	);
 }
