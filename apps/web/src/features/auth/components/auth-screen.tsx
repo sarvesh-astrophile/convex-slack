@@ -1,11 +1,19 @@
 import { useState } from "react";
 import type { SignInFlow } from "../types";
+import { SignInCard } from "./sign-in-card";
+import { SignUpCard } from "./sign-up-card";
 
 export const AuthScreen = () => {
-    const [state, setState] = useState<SignInFlow>("signIn");
-    return (
-        <div className="h-full flex items-center justify-center bg-background ">
-            Auth Screen
-        </div>
-    );
+	const [state, setState] = useState<SignInFlow>("signIn");
+	return (
+		<div className="flex h-full items-center justify-center bg-[#5C3B58]">
+			<div className="md:h-auto md:w-150">
+				{state === "signIn" ? (
+					<SignInCard setState={setState} />
+				) : (
+					<SignUpCard setState={setState} />
+				)}
+			</div>
+		</div>
+	);
 };
