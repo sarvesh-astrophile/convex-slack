@@ -1,20 +1,26 @@
-import { api } from "@open-slack/backend/convex/_generated/api";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Navigate } from "@tanstack/react-router";
+import { Authenticated, AuthLoading, Unauthenticated } from "convex/react";
+import { LoaderCircle } from "lucide-react";
 import { AuthScreen } from "@/features/auth/components/auth-screen";
 
 export const Route = createFileRoute("/auth")({
 	component: RouteComponent,
-	beforeLoad: async ({ context }) => {
-		const isAuthenticated = await context.convexQueryClient.convexClient.query(
-			api.auth.isAuthenticated,
-			{},
-		);
-		if (isAuthenticated) {
-			return { redirect: { to: "/test" } };
-		}
-	},
 });
 
 function RouteComponent() {
-	return <AuthScreen />;
+	return (
+		<>
+			<AuthLoading>
+				<div className="flex h-screen items-center justify-center">
+					<LoaderCircle className="size-8 animate-spin text-muted-foreground" />
+				</div>
+			</AuthLoading>
+			<Unauthenticated>
+				<AuthScreen />
+			</Unauthenticated>
+			<Authenticated>
+				<Navigate to="/test" />
+			</Authenticated>
+		</>
+	);
 }

@@ -19,7 +19,9 @@ export interface RouterAppContext {
 	convexQueryClient: ConvexQueryClient;
 }
 
-const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL as string);
+const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL as string, {
+	verbose: true,
+});
 
 export const Route = createRootRouteWithContext<RouterAppContext>()({
 	head: () => ({

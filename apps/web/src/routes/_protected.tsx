@@ -1,5 +1,6 @@
-import { api } from "@open-slack/backend/convex/_generated/api";
-import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
+import { Authenticated, AuthLoading, Unauthenticated } from "convex/react";
+import { createFileRoute, Navigate, Outlet } from "@tanstack/react-router";
+import { LoaderCircle } from "lucide-react";
 import Header from "@/components/header";
 
 export const Route = createFileRoute("/_protected")({
@@ -8,9 +9,21 @@ export const Route = createFileRoute("/_protected")({
 
 function AuthenticatedLayout() {
 	return (
-		<div className="grid h-svh grid-rows-[auto_1fr]">
-			<Header />
-			<Outlet />
-		</div>
+		<>
+			<AuthLoading>
+				<div className="flex h-screen items-center justify-center">
+					<LoaderCircle className="size-8 animate-spin text-muted-foreground" />
+				</div>
+			</AuthLoading>
+			<Unauthenticated>
+				<Navigate to="/auth" />
+			</Unauthenticated>
+			<Authenticated>
+				<div className="grid h-svh grid-rows-[auto_1fr]">
+					<Header />
+					<Outlet />
+				</div>
+			</Authenticated>
+		</>
 	);
 }
