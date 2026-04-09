@@ -11,8 +11,8 @@ import { Field, FieldError, FieldGroup } from "@open-slack/ui/components/field";
 import { Input } from "@open-slack/ui/components/input";
 import { Separator } from "@open-slack/ui/components/separator";
 import { useForm } from "@tanstack/react-form";
+import { toast } from "sonner";
 import { z } from "zod";
-
 import type { SignInFlow } from "../types";
 import { GitHub, Google } from "./logos";
 
@@ -34,8 +34,18 @@ export const SignInCard = ({ setState }: SignInCardProps) => {
 			email: "",
 			password: "",
 		},
-		onSubmit: (values) => {
-			console.log(values);
+		onSubmit: async ({ value }) => {
+			const formData = new FormData();
+			formData.append("email", value.email);
+			formData.append("password", value.password);
+			formData.append("flow", "signIn");
+			try {
+				await signIn("password", formData);
+			} catch (error) {
+				toast.error(
+					error instanceof Error ? error.message : "Something went wrong",
+				);
+			}
 		},
 		validators: {
 			onSubmit: z.object({
