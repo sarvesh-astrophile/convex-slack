@@ -41,12 +41,19 @@ export const SignUpCard = ({ setState }: SignUpCardProps) => {
 			confirmPassword: "",
 		},
 		validators: {
-			onSubmit: z.object({
-				name: z.string().min(1),
-				email: z.email(),
-				password: z.string().min(8),
-				confirmPassword: z.string().min(8),
-			}),
+			onSubmit: z
+				.object({
+					name: z.string().min(1, "Name is required"),
+					email: z.email("Invalid email address"),
+					password: z.string().min(8, "Password must be at least 8 characters"),
+					confirmPassword: z
+						.string()
+						.min(8, "Password must be at least 8 characters"),
+				})
+				.refine((data) => data.password === data.confirmPassword, {
+					message: "Passwords do not match",
+					path: ["confirmPassword"],
+				}),
 		},
 		onSubmit: async ({ value }) => {
 			setServerError(null);
@@ -54,13 +61,12 @@ export const SignUpCard = ({ setState }: SignUpCardProps) => {
 			formData.append("name", value.name);
 			formData.append("email", value.email);
 			formData.append("password", value.password);
-			formData.append("confirmPassword", value.confirmPassword);
 			formData.append("flow", "signUp");
 			try {
 				await signIn("password", formData);
 			} catch (error) {
 				console.error(error);
-				setServerError("Invalid email or password");
+				setServerError("Something went wrong. Please try again.");
 			}
 		},
 	});

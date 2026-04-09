@@ -6,11 +6,17 @@ import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
-  plugins: [tsconfigPaths(), tailwindcss(), tanstackStart(), viteReact(), alchemy()],
-  server: {
-    port: 3001,
-  },
-  ssr: {
-    noExternal: [],
-  },
+	plugins: [
+		tsconfigPaths(),
+		tailwindcss(),
+		tanstackStart(),
+		viteReact(),
+		alchemy(),
+	],
+	server: {
+		port: 3001,
+	},
+	ssr: {
+		noExternal: [],
+	},
 });
