@@ -11,6 +11,7 @@ import { Field, FieldError, FieldGroup } from "@open-slack/ui/components/field";
 import { Input } from "@open-slack/ui/components/input";
 import { Separator } from "@open-slack/ui/components/separator";
 import { useForm } from "@tanstack/react-form";
+import { useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
 import type { SignInFlow } from "../types";
@@ -22,6 +23,8 @@ interface SignUpCardProps {
 
 export const SignUpCard = ({ setState }: SignUpCardProps) => {
 	const { signIn } = useAuthActions();
+	const [serverError, setServerError] = useState<string | null>(null);
+
 	const handleProviderSignIn = async (value: "github" | "google") => {
 		const result = await signIn(value);
 		// OAuth requires redirect to provider
@@ -43,6 +46,7 @@ export const SignUpCard = ({ setState }: SignUpCardProps) => {
 			}),
 		},
 		onSubmit: async ({ value }) => {
+			setServerError(null);
 			const formData = new FormData();
 			formData.append("email", value.email);
 			formData.append("password", value.password);
@@ -51,7 +55,8 @@ export const SignUpCard = ({ setState }: SignUpCardProps) => {
 			try {
 				await signIn("password", formData);
 			} catch (error) {
-				toast.error(error instanceof Error ? error.message : "Something went wrong");
+				console.error(error);
+				setServerError("Invalid email or password");
 			}
 		},
 	});
@@ -90,7 +95,12 @@ export const SignUpCard = ({ setState }: SignUpCardProps) => {
 											required
 										/>
 										{isInvalid && (
-											<FieldError errors={field.state.meta.errors} />
+											<FieldError
+												errors={field.state.meta.errors?.map((e) => ({
+													message:
+														typeof e === "string" ? e : e?.message?.toString(),
+												}))}
+											/>
 										)}
 									</Field>
 								);
@@ -115,7 +125,12 @@ export const SignUpCard = ({ setState }: SignUpCardProps) => {
 											required
 										/>
 										{isInvalid && (
-											<FieldError errors={field.state.meta.errors} />
+											<FieldError
+												errors={field.state.meta.errors?.map((e) => ({
+													message:
+														typeof e === "string" ? e : e?.message?.toString(),
+												}))}
+											/>
 										)}
 									</Field>
 								);
@@ -140,12 +155,20 @@ export const SignUpCard = ({ setState }: SignUpCardProps) => {
 											required
 										/>
 										{isInvalid && (
-											<FieldError errors={field.state.meta.errors} />
+											<FieldError
+												errors={field.state.meta.errors?.map((e) => ({
+													message:
+														typeof e === "string" ? e : e?.message?.toString(),
+												}))}
+											/>
 										)}
 									</Field>
 								);
 							}}
 						/>
+						{serverError && (
+							<p className="text-red-500 text-sm">{serverError}</p>
+						)}
 						<Button
 							form="sign-up-form"
 							type="submit"

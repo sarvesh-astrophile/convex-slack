@@ -11,7 +11,7 @@ import { Field, FieldError, FieldGroup } from "@open-slack/ui/components/field";
 import { Input } from "@open-slack/ui/components/input";
 import { Separator } from "@open-slack/ui/components/separator";
 import { useForm } from "@tanstack/react-form";
-import { toast } from "sonner";
+import { useState } from "react";
 import { z } from "zod";
 import type { SignInFlow } from "../types";
 import { GitHub, Google } from "./logos";
@@ -22,6 +22,8 @@ interface SignInCardProps {
 
 export const SignInCard = ({ setState }: SignInCardProps) => {
 	const { signIn } = useAuthActions();
+	const [serverError, setServerError] = useState<string | null>(null);
+
 	const handleProviderSignIn = async (value: "github" | "google") => {
 		const result = await signIn(value);
 		// OAuth requires redirect to provider
@@ -29,12 +31,16 @@ export const SignInCard = ({ setState }: SignInCardProps) => {
 			window.location.href = result.redirect.toString();
 		}
 	};
+
 	const form = useForm({
 		defaultValues: {
 			email: "",
 			password: "",
 		},
 		onSubmit: async ({ value }) => {
+			// Clear previous server error on retry
+			setServerError(null);
+
 			const formData = new FormData();
 			formData.append("email", value.email);
 			formData.append("password", value.password);
@@ -42,9 +48,10 @@ export const SignInCard = ({ setState }: SignInCardProps) => {
 			try {
 				await signIn("password", formData);
 			} catch (error) {
-				toast.error(
-					error instanceof Error ? error.message : "Something went wrong",
-				);
+				// Log full error to console for debugging
+				console.error("Sign in error:", error);
+				// Show user-friendly message in UI
+				setServerError("Invalid email or password");
 			}
 		},
 		validators: {
@@ -91,7 +98,12 @@ export const SignInCard = ({ setState }: SignInCardProps) => {
 											required
 										/>
 										{isInvalid && (
-											<FieldError errors={field.state.meta.errors} />
+											<FieldError
+												errors={field.state.meta.errors?.map((e) => ({
+													message:
+														typeof e === "string" ? e : e?.message?.toString(),
+												}))}
+											/>
 										)}
 									</Field>
 								);
@@ -116,12 +128,20 @@ export const SignInCard = ({ setState }: SignInCardProps) => {
 											required
 										/>
 										{isInvalid && (
-											<FieldError errors={field.state.meta.errors} />
+											<FieldError
+												errors={field.state.meta.errors?.map((e) => ({
+													message:
+														typeof e === "string" ? e : e?.message?.toString(),
+												}))}
+											/>
 										)}
 									</Field>
 								);
 							}}
 						/>
+						{serverError && (
+							<p className="text-red-500 text-sm">{serverError}</p>
+						)}
 						<Button
 							type="submit"
 							form="sign-in-form"
