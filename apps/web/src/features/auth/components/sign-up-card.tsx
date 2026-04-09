@@ -35,12 +35,14 @@ export const SignUpCard = ({ setState }: SignUpCardProps) => {
 	};
 	const form = useForm({
 		defaultValues: {
+			name: "",
 			email: "",
 			password: "",
 			confirmPassword: "",
 		},
 		validators: {
 			onSubmit: z.object({
+				name: z.string().min(1),
 				email: z.email(),
 				password: z.string().min(8),
 				confirmPassword: z.string().min(8),
@@ -49,6 +51,7 @@ export const SignUpCard = ({ setState }: SignUpCardProps) => {
 		onSubmit: async ({ value }) => {
 			setServerError(null);
 			const formData = new FormData();
+			formData.append("name", value.name);
 			formData.append("email", value.email);
 			formData.append("password", value.password);
 			formData.append("confirmPassword", value.confirmPassword);
@@ -77,6 +80,36 @@ export const SignUpCard = ({ setState }: SignUpCardProps) => {
 					className="space-y-2.5"
 				>
 					<FieldGroup className="gap-2.5">
+						<form.Field
+							name="name"
+							children={(field) => {
+								const isInvalid =
+									field.state.meta.isTouched && !field.state.meta.isValid;
+								return (
+									<Field data-invalid={isInvalid}>
+										<Input
+											id={field.name}
+											name={field.name}
+											value={field.state.value}
+											onBlur={field.handleBlur}
+											onChange={(e) => field.handleChange(e.target.value)}
+											aria-invalid={isInvalid}
+											placeholder="Full Name"
+											type="text"
+											required
+										/>
+										{isInvalid && (
+											<FieldError
+												errors={field.state.meta.errors?.map((e) => ({
+													message:
+														typeof e === "string" ? e : e?.message?.toString(),
+												}))}
+											/>
+										)}
+									</Field>
+								);
+							}}
+						/>
 						<form.Field
 							name="email"
 							children={(field) => {
