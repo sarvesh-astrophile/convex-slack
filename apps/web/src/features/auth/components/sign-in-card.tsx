@@ -23,8 +23,10 @@ interface SignInCardProps {
 export const SignInCard = ({ setState }: SignInCardProps) => {
 	const { signIn } = useAuthActions();
 	const [serverError, setServerError] = useState<string | null>(null);
+	const [isProviderLoading, setIsProviderLoading] = useState(false);
 
 	const handleProviderSignIn = async (value: "github" | "google") => {
+		setIsProviderLoading(true);
 		const result = await signIn(value);
 		// OAuth requires redirect to provider
 		if (result.redirect) {
@@ -147,16 +149,16 @@ export const SignInCard = ({ setState }: SignInCardProps) => {
 							form="sign-in-form"
 							className="w-full"
 							size="lg"
-							disabled={false}
+							disabled={form.state.isSubmitting || isProviderLoading}
 						>
-							Sign in
+							{form.state.isSubmitting ? "Signing in..." : "Sign in"}
 						</Button>
 					</FieldGroup>
 				</form>
 				<Separator />
 				<div className="flex flex-col gap-y-2.5">
 					<Button
-						disabled={false}
+						disabled={form.state.isSubmitting || isProviderLoading}
 						onClick={() => handleProviderSignIn("google")}
 						variant="outline"
 						size="lg"
@@ -165,7 +167,7 @@ export const SignInCard = ({ setState }: SignInCardProps) => {
 						<Google className="size-5" /> Continue with Google
 					</Button>
 					<Button
-						disabled={false}
+						disabled={form.state.isSubmitting || isProviderLoading}
 						onClick={() => handleProviderSignIn("github")}
 						variant="outline"
 						size="lg"

@@ -12,7 +12,6 @@ import { Input } from "@open-slack/ui/components/input";
 import { Separator } from "@open-slack/ui/components/separator";
 import { useForm } from "@tanstack/react-form";
 import { useState } from "react";
-import { toast } from "sonner";
 import { z } from "zod";
 import type { SignInFlow } from "../types";
 import { GitHub, Google } from "./logos";
@@ -24,8 +23,10 @@ interface SignUpCardProps {
 export const SignUpCard = ({ setState }: SignUpCardProps) => {
 	const { signIn } = useAuthActions();
 	const [serverError, setServerError] = useState<string | null>(null);
+	const [isProviderLoading, setIsProviderLoading] = useState<boolean>(false);
 
-	const handleProviderSignIn = async (value: "github" | "google") => {
+	const handleProviderSignUp = async (value: "github" | "google") => {
+		setIsProviderLoading(true);
 		const result = await signIn(value);
 		// OAuth requires redirect to provider
 		if (result.redirect) {
@@ -174,7 +175,7 @@ export const SignUpCard = ({ setState }: SignUpCardProps) => {
 							type="submit"
 							className="w-full"
 							size="lg"
-							disabled={false}
+							disabled={form.state.isSubmitting || isProviderLoading}
 						>
 							Sign up
 						</Button>
@@ -183,8 +184,8 @@ export const SignUpCard = ({ setState }: SignUpCardProps) => {
 				<Separator />
 				<div className="flex flex-col gap-y-2.5">
 					<Button
-						disabled={false}
-						onClick={() => handleProviderSignIn("google")}
+						disabled={form.state.isSubmitting || isProviderLoading}
+						onClick={() => handleProviderSignUp("google")}
 						variant="outline"
 						size="lg"
 						className="w-full"
@@ -192,8 +193,8 @@ export const SignUpCard = ({ setState }: SignUpCardProps) => {
 						<Google className="size-5" /> Continue with Google
 					</Button>
 					<Button
-						disabled={false}
-						onClick={() => handleProviderSignIn("github")}
+						disabled={form.state.isSubmitting || isProviderLoading}
+						onClick={() => handleProviderSignUp("github")}
 						variant="outline"
 						size="lg"
 						className="w-full"
