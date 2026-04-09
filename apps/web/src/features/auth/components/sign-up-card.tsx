@@ -27,10 +27,15 @@ export const SignUpCard = ({ setState }: SignUpCardProps) => {
 
 	const handleProviderSignUp = async (value: "github" | "google") => {
 		setIsProviderLoading(true);
-		const result = await signIn(value);
-		// OAuth requires redirect to provider
-		if (result.redirect) {
-			window.location.href = result.redirect.toString();
+		try {
+			const result = await signIn(value);
+			// OAuth requires redirect to provider
+			if (result.redirect) {
+				window.location.href = result.redirect.toString();
+			}
+		} catch (error) {
+			console.error("Provider sign-up error:", error);
+			setIsProviderLoading(false);
 		}
 	};
 	const form = useForm({
@@ -65,8 +70,12 @@ export const SignUpCard = ({ setState }: SignUpCardProps) => {
 			try {
 				await signIn("password", formData);
 			} catch (error) {
-				console.error(error);
-				setServerError("Something went wrong. Please try again.");
+				console.error("Sign up error:", error);
+				setServerError(
+					error instanceof Error
+						? error.message
+						: "Something went wrong. Please try again.",
+				);
 			}
 		},
 	});
@@ -82,7 +91,10 @@ export const SignUpCard = ({ setState }: SignUpCardProps) => {
 			<CardContent className="space-y-5 px-0 pb-0">
 				<form
 					id="sign-up-form"
-					onSubmit={form.handleSubmit}
+					onSubmit={(e) => {
+						e.preventDefault();
+						void form.handleSubmit();
+					}}
 					className="space-y-2.5"
 				>
 					<FieldGroup className="gap-2.5">

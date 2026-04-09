@@ -27,10 +27,15 @@ export const SignInCard = ({ setState }: SignInCardProps) => {
 
 	const handleProviderSignIn = async (value: "github" | "google") => {
 		setIsProviderLoading(true);
-		const result = await signIn(value);
-		// OAuth requires redirect to provider
-		if (result.redirect) {
-			window.location.href = result.redirect.toString();
+		try {
+			const result = await signIn(value);
+			// OAuth requires redirect to provider
+			if (result.redirect) {
+				window.location.href = result.redirect.toString();
+			}
+		} catch (error) {
+			console.error("Provider sign-in error:", error);
+			setIsProviderLoading(false);
 		}
 	};
 
@@ -50,10 +55,8 @@ export const SignInCard = ({ setState }: SignInCardProps) => {
 			try {
 				await signIn("password", formData);
 			} catch (error) {
-				// Log full error to console for debugging
-				console.error("Sign in error:", error);
 				// Show user-friendly message in UI
-				setServerError("Invalid email or password");
+				setServerError(error instanceof Error ? error.message : "Invalid email or password");
 			}
 		},
 		validators: {
@@ -77,7 +80,7 @@ export const SignInCard = ({ setState }: SignInCardProps) => {
 					id="sign-in-form"
 					onSubmit={(e) => {
 						e.preventDefault();
-						form.handleSubmit();
+						void form.handleSubmit();
 					}}
 				>
 					<FieldGroup className="gap-2.5">

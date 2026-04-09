@@ -21,7 +21,7 @@ export interface RouterAppContext {
 
 const convex = new ConvexReactClient(
 	import.meta.env.VITE_CONVEX_URL as string,
-	{},
+	{ verbose: true },
 );
 
 export const Route = createRootRouteWithContext<RouterAppContext>()({
