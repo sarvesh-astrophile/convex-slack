@@ -12,7 +12,7 @@ import {
 	DropdownMenuTrigger,
 } from "@open-slack/ui/components/dropdown-menu";
 import { LoaderCircle, LogOut } from "lucide-react";
-import { useCurrentUser } from "../hooks/user-current-user";
+import { useCurrentUser } from "../api/user-current-user";
 
 export const UserButton = () => {
 	const { signOut } = useAuthActions();
