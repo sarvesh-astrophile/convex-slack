@@ -13,7 +13,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ProtectedRouteImport } from './routes/_protected'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProtectedTestRouteImport } from './routes/_protected/test'
-import { Route as ProtectedWorkspaceWorkspaceIdRouteImport } from '../routes/_protected/workspace.$workspaceId.tsx
+import { Route as ProtectedWorkspaceWorkspaceIdRouteImport } from './routes/_protected/workspace.$workspaceId'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
