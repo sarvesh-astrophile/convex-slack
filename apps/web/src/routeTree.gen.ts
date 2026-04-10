@@ -13,7 +13,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ProtectedRouteImport } from './routes/_protected'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProtectedTestRouteImport } from './routes/_protected/test'
-import { Route as ProtectedWorkspacesWorkspaceIdRouteImport } from './routes/_protected/workspaces.$workspaceId'
+import { Route as ProtectedWorkspaceWorkspaceIdRouteImport } from '../routes/_protected/workspace.$workspaceId.tsx
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -34,10 +34,10 @@ const ProtectedTestRoute = ProtectedTestRouteImport.update({
   path: '/test',
   getParentRoute: () => ProtectedRoute,
 } as any)
-const ProtectedWorkspacesWorkspaceIdRoute =
-  ProtectedWorkspacesWorkspaceIdRouteImport.update({
-    id: '/workspaces/$workspaceId',
-    path: '/workspaces/$workspaceId',
+const ProtectedWorkspaceWorkspaceIdRoute =
+  ProtectedWorkspaceWorkspaceIdRouteImport.update({
+    id: '/workspace/$workspaceId',
+    path: '/workspace/$workspaceId',
     getParentRoute: () => ProtectedRoute,
   } as any)
 
@@ -45,13 +45,13 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/test': typeof ProtectedTestRoute
-  '/workspaces/$workspaceId': typeof ProtectedWorkspacesWorkspaceIdRoute
+  '/workspace/$workspaceId': typeof ProtectedWorkspaceWorkspaceIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/test': typeof ProtectedTestRoute
-  '/workspaces/$workspaceId': typeof ProtectedWorkspacesWorkspaceIdRoute
+  '/workspace/$workspaceId': typeof ProtectedWorkspaceWorkspaceIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -59,20 +59,20 @@ export interface FileRoutesById {
   '/_protected': typeof ProtectedRouteWithChildren
   '/auth': typeof AuthRoute
   '/_protected/test': typeof ProtectedTestRoute
-  '/_protected/workspaces/$workspaceId': typeof ProtectedWorkspacesWorkspaceIdRoute
+  '/_protected/workspace/$workspaceId': typeof ProtectedWorkspaceWorkspaceIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/test' | '/workspaces/$workspaceId'
+  fullPaths: '/' | '/auth' | '/test' | '/workspace/$workspaceId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/test' | '/workspaces/$workspaceId'
+  to: '/' | '/auth' | '/test' | '/workspace/$workspaceId'
   id:
     | '__root__'
     | '/'
     | '/_protected'
     | '/auth'
     | '/_protected/test'
-    | '/_protected/workspaces/$workspaceId'
+    | '/_protected/workspace/$workspaceId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -111,11 +111,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedTestRouteImport
       parentRoute: typeof ProtectedRoute
     }
-    '/_protected/workspaces/$workspaceId': {
-      id: '/_protected/workspaces/$workspaceId'
-      path: '/workspaces/$workspaceId'
-      fullPath: '/workspaces/$workspaceId'
-      preLoaderRoute: typeof ProtectedWorkspacesWorkspaceIdRouteImport
+    '/_protected/workspace/$workspaceId': {
+      id: '/_protected/workspace/$workspaceId'
+      path: '/workspace/$workspaceId'
+      fullPath: '/workspace/$workspaceId'
+      preLoaderRoute: typeof ProtectedWorkspaceWorkspaceIdRouteImport
       parentRoute: typeof ProtectedRoute
     }
   }
@@ -123,12 +123,12 @@ declare module '@tanstack/react-router' {
 
 interface ProtectedRouteChildren {
   ProtectedTestRoute: typeof ProtectedTestRoute
-  ProtectedWorkspacesWorkspaceIdRoute: typeof ProtectedWorkspacesWorkspaceIdRoute
+  ProtectedWorkspaceWorkspaceIdRoute: typeof ProtectedWorkspaceWorkspaceIdRoute
 }
 
 const ProtectedRouteChildren: ProtectedRouteChildren = {
   ProtectedTestRoute: ProtectedTestRoute,
-  ProtectedWorkspacesWorkspaceIdRoute: ProtectedWorkspacesWorkspaceIdRoute,
+  ProtectedWorkspaceWorkspaceIdRoute: ProtectedWorkspaceWorkspaceIdRoute,
 }
 
 const ProtectedRouteWithChildren = ProtectedRoute._addFileChildren(

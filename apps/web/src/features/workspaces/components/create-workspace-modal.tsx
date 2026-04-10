@@ -36,7 +36,7 @@ export const CreateWorkspaceModal = ({
 	const { mutate } = useMutation({
 		mutationFn: useConvexMutation(api.workspaces.create),
 		onSuccess: (workspace: CreateWorkspaceReturnType) => {
-			navigate({ to: `/workspaces/${workspace}` });
+			navigate({ to: `/workspace/${workspace?._id}` });
 		},
 
 		onError: (error) => {
