@@ -19,7 +19,7 @@ function RouteComponent() {
 				<AuthScreen />
 			</Unauthenticated>
 			<Authenticated>
-				<Navigate to="/test" />
+				<Navigate to="/home" />
 			</Authenticated>
 		</>
 	);

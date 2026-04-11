@@ -12,7 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ProtectedRouteImport } from './routes/_protected'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as ProtectedTestRouteImport } from './routes/_protected/test'
+import { Route as ProtectedHomeRouteImport } from './routes/_protected/home'
 import { Route as ProtectedWorkspaceWorkspaceIdRouteImport } from './routes/_protected/workspace.$workspaceId'
 
 const AuthRoute = AuthRouteImport.update({
@@ -29,9 +29,9 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ProtectedTestRoute = ProtectedTestRouteImport.update({
-  id: '/test',
-  path: '/test',
+const ProtectedHomeRoute = ProtectedHomeRouteImport.update({
+  id: '/home',
+  path: '/home',
   getParentRoute: () => ProtectedRoute,
 } as any)
 const ProtectedWorkspaceWorkspaceIdRoute =
@@ -44,13 +44,13 @@ const ProtectedWorkspaceWorkspaceIdRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
-  '/test': typeof ProtectedTestRoute
+  '/home': typeof ProtectedHomeRoute
   '/workspace/$workspaceId': typeof ProtectedWorkspaceWorkspaceIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
-  '/test': typeof ProtectedTestRoute
+  '/home': typeof ProtectedHomeRoute
   '/workspace/$workspaceId': typeof ProtectedWorkspaceWorkspaceIdRoute
 }
 export interface FileRoutesById {
@@ -58,20 +58,20 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_protected': typeof ProtectedRouteWithChildren
   '/auth': typeof AuthRoute
-  '/_protected/test': typeof ProtectedTestRoute
+  '/_protected/home': typeof ProtectedHomeRoute
   '/_protected/workspace/$workspaceId': typeof ProtectedWorkspaceWorkspaceIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/test' | '/workspace/$workspaceId'
+  fullPaths: '/' | '/auth' | '/home' | '/workspace/$workspaceId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/test' | '/workspace/$workspaceId'
+  to: '/' | '/auth' | '/home' | '/workspace/$workspaceId'
   id:
     | '__root__'
     | '/'
     | '/_protected'
     | '/auth'
-    | '/_protected/test'
+    | '/_protected/home'
     | '/_protected/workspace/$workspaceId'
   fileRoutesById: FileRoutesById
 }
@@ -104,11 +104,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_protected/test': {
-      id: '/_protected/test'
-      path: '/test'
-      fullPath: '/test'
-      preLoaderRoute: typeof ProtectedTestRouteImport
+    '/_protected/home': {
+      id: '/_protected/home'
+      path: '/home'
+      fullPath: '/home'
+      preLoaderRoute: typeof ProtectedHomeRouteImport
       parentRoute: typeof ProtectedRoute
     }
     '/_protected/workspace/$workspaceId': {
@@ -122,12 +122,12 @@ declare module '@tanstack/react-router' {
 }
 
 interface ProtectedRouteChildren {
-  ProtectedTestRoute: typeof ProtectedTestRoute
+  ProtectedHomeRoute: typeof ProtectedHomeRoute
   ProtectedWorkspaceWorkspaceIdRoute: typeof ProtectedWorkspaceWorkspaceIdRoute
 }
 
 const ProtectedRouteChildren: ProtectedRouteChildren = {
-  ProtectedTestRoute: ProtectedTestRoute,
+  ProtectedHomeRoute: ProtectedHomeRoute,
   ProtectedWorkspaceWorkspaceIdRoute: ProtectedWorkspaceWorkspaceIdRoute,
 }
 

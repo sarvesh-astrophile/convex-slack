@@ -9,7 +9,7 @@ const serachSchema = z.object({
 	createWorkspace: z.boolean().catch(false).optional(),
 });
 
-export const Route = createFileRoute("/_protected/test")({
+export const Route = createFileRoute("/_protected/home")({
 	validateSearch: serachSchema,
 	component: RouteComponent,
 });
@@ -25,7 +25,7 @@ function RouteComponent() {
 	useEffect(() => {
 		if (isLoading) return;
 		if (workspaceId) {
-			console.log("Redirect to workspace");
+			navigate({ to: `/workspace/${workspaceId}` });
 		} else {
 			navigate({ search: { createWorkspace: true } });
 		}
@@ -46,5 +46,5 @@ function RouteComponent() {
 				}
 			/>
 		</div>
-	);
+	)
 }
