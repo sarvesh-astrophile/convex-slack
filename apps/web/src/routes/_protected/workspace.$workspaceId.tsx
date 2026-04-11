@@ -1,4 +1,6 @@
+import type { Id } from "@open-slack/backend/convex/_generated/dataModel";
 import { createFileRoute } from "@tanstack/react-router";
+import { useGetWorkspace } from "@/features/workspaces/api/use-get-workspace";
 
 export const Route = createFileRoute("/_protected/workspace/$workspaceId")({
 	component: RouteComponent,
@@ -6,5 +8,10 @@ export const Route = createFileRoute("/_protected/workspace/$workspaceId")({
 
 function RouteComponent() {
 	const { workspaceId } = Route.useParams();
-	return <div>Hello {workspaceId}</div>;
+	const { data } = useGetWorkspace({ id: workspaceId as Id<"workspaces"> });
+	return (
+		<div>
+			Hello {workspaceId} : {data?.name}
+		</div>
+	);
 }

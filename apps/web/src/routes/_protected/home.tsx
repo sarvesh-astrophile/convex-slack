@@ -17,8 +17,8 @@ export const Route = createFileRoute("/_protected/home")({
 function RouteComponent() {
 	const navigate = useNavigate({ from: Route.fullPath });
 	const { createWorkspace } = Route.useSearch();
-	const openModal = () => navigate({ search: { createWorkspace: true } });
-	const closeModal = () => navigate({ search: { createWorkspace: false } });
+	// const openModal = () => navigate({ search: { createWorkspace: true } });
+	// const closeModal = () => navigate({ search: { createWorkspace: false } });
 	const isOpen = createWorkspace ?? false;
 	const { data, isLoading } = useGetWorkspaces();
 	const workspaceId = useMemo(() => data?.[0]?._id, [data]);
@@ -46,5 +46,5 @@ function RouteComponent() {
 				}
 			/>
 		</div>
-	)
+	);
 }
