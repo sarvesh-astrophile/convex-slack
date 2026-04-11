@@ -24,7 +24,7 @@ interface CreateWorkspaceModalProps {
 }
 
 type CreateWorkspaceReturnType = FunctionReturnType<
-	typeof api.workspaces.create
+	typeof api.workspace.create
 >;
 
 export const CreateWorkspaceModal = ({
@@ -34,7 +34,7 @@ export const CreateWorkspaceModal = ({
 	const navigate = useNavigate();
 
 	const { mutate } = useMutation({
-		mutationFn: useConvexMutation(api.workspaces.create),
+		mutationFn: useConvexMutation(api.workspace.create),
 		onSuccess: (workspace: CreateWorkspaceReturnType) => {
 			toast.success("Workspace created successfully");
 			navigate({ to: `/workspace/${workspace?._id}` });

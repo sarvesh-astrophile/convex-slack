@@ -19,8 +19,9 @@ function AuthenticatedLayout() {
 				<Navigate to="/auth" />
 			</Unauthenticated>
 			<Authenticated>
-				<div className="grid h-svh grid-rows-[auto_1fr]">
-					<Header />
+				<div className="h-full">
+					{/*<Header />*/}
+
 					<Outlet />
 				</div>
 			</Authenticated>
